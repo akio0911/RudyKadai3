@@ -8,8 +8,8 @@ import SwiftUI
 struct ContentView: View {
     @State private var textNum1: String = ""
     @State private var textNum2: String = ""
-    @State private var intNum1: Int = 0
-    @State private var intNum2: Int = 0
+    @State private var signedNum1: Int = 0
+    @State private var signedNum2: Int = 0
     @State private var isNum1Negative: Bool = false
     @State private var isNum2Negative: Bool = false
     @State private var calcAns: String = "Label"
@@ -20,27 +20,26 @@ struct ContentView: View {
                 NumInputAndToggleField(textNum: $textNum2, isNumNegative: $isNum2Negative)
             }
             Button(action: {
-                intNum1 = convertNum(textNum1, isNum1Negative)
-                intNum2 = convertNum(textNum2, isNum2Negative)
-                calcAns = String(intNum1 + intNum2)
+                signedNum1 = convertNum(textNum1, isNum1Negative)
+                signedNum2 = convertNum(textNum2, isNum2Negative)
+                calcAns = String(signedNum1 + signedNum2)
                 UIApplication.shared.closeKeyboard()
             }, label: {
                 Text("Button")
             })
             HStack(spacing: 75) {
-                Text("\(intNum1)")
+                Text("\(signedNum1)")
                 Text("+")
-                Text("\(intNum2)")
+                Text("\(signedNum2)")
             }
             Text(calcAns)
         }.padding(50)
     }
-    func convertNum(_ textNum: String, _ isNegative: Bool) -> Int {
-        guard var num = Int(textNum) else {
+    private func convertNum(_ textNum: String, _ isNegative: Bool) -> Int {
+        guard let num = Int(textNum) else {
             return 0
         }
-        num *= isNegative ? -1 : 1
-        return num
+        return isNegative ? -num : num
     }
 }
 
@@ -57,8 +56,8 @@ struct NumInputAndToggleField: View {
                 .multilineTextAlignment(.center)
             HStack(alignment: .center, spacing: 10) {
                 Text("+")
-                Toggle("", isOn: $isNumNegative).frame(width: 50)
-                Text(" -")
+                Toggle("", isOn: $isNumNegative)
+                Text("-")
             }
         }
     }
